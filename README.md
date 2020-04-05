@@ -47,7 +47,8 @@ serverless deploy
 - To create a deployment package and upload via AWS console
 
 ```bash
-```zip -r ../function-name.zip .```
+zip -r ../function-name.zip .
+```
 
 - Make sure to specify BUCKET environment variable and increase the timeout from 3 seconds
 
