@@ -1,0 +1,12 @@
+{
+  "name": "audible-third-party-checker",
+  "description": "Checks third party tag calls for a web page and produces a report that gets stored in S3",
+  "version": "1.0.0",
+  "author": "ian moraes",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.521.0",
+    "node-fetch": "^2.6.0",
+    "round-to": "^3.0.0"
+  }
+}

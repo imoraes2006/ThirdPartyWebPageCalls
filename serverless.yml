@@ -1,0 +1,31 @@
+service: audible-3p-call-analysis
+
+frameworkVersion: ">=1.1.0"
+
+custom:
+  bucket: <<define an S3 bucket>>>
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  timeout: 360
+  stage: dev
+  role: <<an AWS role>>
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+
+functions:
+  getperf:
+    handler: driver.getperf
+    events:
+      - schedule:
+          rate: cron(0 8 12 * ? *)
+          enabled: true
+    environment:
+      BUCKET: ${self:custom.bucket}
+
