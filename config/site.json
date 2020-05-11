@@ -1,7 +1,8 @@
+
 {
-    "ca": "https://www.audible.ca/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=RFK35AY9JXJPDFA6Q1FC&",
+	"us": "https://www.audible.com/",
+	"ca": "https://www.audible.ca/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=RFK35AY9JXJPDFA6Q1FC&",
     "de": "https://www.audible.de/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=VQ0QGQGNACWSKKHBB9MJ&",
     "uk": "https://www.audible.co.uk/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=YNYJMRWB25D89ZMPHEDD&",
-    "au": "https://www.audible.com.au/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=44Q27DV3Q4VE9DDFNY11&",
-    "us": "https://www.audible.com/"
+    "au": "https://www.audible.com.au/?ipRedirectOverride=true&overrideBaseCountry=true&pf_rd_p=d85c6664-551b-4c7d-bafd-ec7aa9c62ccf&pf_rd_r=44Q27DV3Q4VE9DDFNY11&"
 }
