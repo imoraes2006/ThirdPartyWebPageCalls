@@ -321,40 +321,44 @@ function getCriticalRequestChains(obj) {
 
 module.exports = (obj) => {
   let html = '';
-  const obj1 = obj.lighthouseResult.audits;
-  const contentfulPaintDistro = getContentfulPaintDistro(obj);
-  const totalSize = getTotalPageSize(obj1);
-  const javaScriptParseTime = getJSParseTime(obj1);
-  const totalPageMB = convertToMB(totalSize);
-  const tTI = getTimeToInteractive(obj1);
-  const fMPaint = getFirstMeaningfulPaint(obj1);
-  const targetSiteName = getTarget(obj);
-  const thirdPartyBlockingTime = getBlockingTime(obj1);
-  // new stuff
-  const obj2 = obj1['critical-request-chains'].details;
-  let chains = obj2.chains;
-  find3PInCriticalRequestChain(chains);
+  if ((typeof obj  === "undefined") || (typeof obj.lighthouseResult  === "undefined")) {
+    html = 'Sorry there was an error in creating the report'
+  } else {
+      const obj1 = obj.lighthouseResult.audits;
+      const contentfulPaintDistro = getContentfulPaintDistro(obj);
+      const totalSize = getTotalPageSize(obj1);
+      const javaScriptParseTime = getJSParseTime(obj1);
+      const totalPageMB = convertToMB(totalSize);
+      const tTI = getTimeToInteractive(obj1);
+      const fMPaint = getFirstMeaningfulPaint(obj1);
+      const targetSiteName = getTarget(obj);
+      const thirdPartyBlockingTime = getBlockingTime(obj1);
+      // new stuff
+      const obj2 = obj1['critical-request-chains'].details;
+      let chains = obj2.chains;
+      find3PInCriticalRequestChain(chains);
 
-  const cpDomains = getCPDomains();
-  const thirdPCallsinCP = getThirdPInCriticalPath();
-  const str3 = find3PDomains(obj1);
+      const cpDomains = getCPDomains();
+      const thirdPCallsinCP = getThirdPInCriticalPath();
+      const str3 = find3PDomains(obj1);
 
-  const core = {
-    targetSite: targetSiteName,
-    totPageMB: totalPageMB,
-    cpdCtr: contentfulPaintDistro.ctr,
-    contentfulPaintDistro: contentfulPaintDistro.display,
-    firstMeaningfulPaint: fMPaint,
-    jsParseTime: javaScriptParseTime,
-    timeToInteractive: tTI,
-    outsideCalls : ctrThirdPartyC,
-    blockingTime: thirdPartyBlockingTime,
-    totPageSize: totalSize,
-    cpDoms: cpDomains, 
-    thirdPCNCP: thirdPCallsinCP,
-    badGuys : str3
-  };
-  // pass data to creaee HTML page
-  html = createString(core);
+      const core = {
+        targetSite: targetSiteName,
+        totPageMB: totalPageMB,
+        cpdCtr: contentfulPaintDistro.ctr,
+        contentfulPaintDistro: contentfulPaintDistro.display,
+        firstMeaningfulPaint: fMPaint,
+        jsParseTime: javaScriptParseTime,
+        timeToInteractive: tTI,
+        outsideCalls : ctrThirdPartyC,
+        blockingTime: thirdPartyBlockingTime,
+        totPageSize: totalSize,
+        cpDoms: cpDomains, 
+        thirdPCNCP: thirdPCallsinCP,
+        badGuys : str3
+      };
+      // pass data to creaee HTML page
+      html = createString(core);
+  }
   return html;
 };
