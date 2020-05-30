@@ -44,10 +44,11 @@ function generateFileName(fileName) {
  */
 function produceReport(targetUrl, context, callback) {
   const perfUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${targetUrl}`;
-  console.log(perfUrl);
+  // console.log(perfUrl);
   fetch(perfUrl)
     .then((response) => {
       response.json().then(function(obj) {
+        // console.log(obj);
         const html1 = createPage(obj);
         // generate the file name for storing in S3
         const reportFileName = generateFileName(targetUrl);
@@ -75,10 +76,11 @@ const delay = (ms) => new Promise(
  */
 function dispatch(sites, context, callback) {
   delay(2000).then(() => {
-    console.log('Resolved after 2 seconds');
+    // console.log('Resolved after 2 seconds');
     const end = Date.now(); // done
     console.log(`The loop took ${end - start} ms`);
     produceReport(sites, context, callback);
+    // produceReport(sites);
   });
 }
 

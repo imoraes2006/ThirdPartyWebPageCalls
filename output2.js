@@ -9,7 +9,6 @@ const roundTo = require('round-to');
 var map = new Map;
 var thirdPInCC = 0;
 var thirdPDomainName = '';
-var thirdPartyCallsCount = 0;
 var ctrThirdPartyC = 0;
 
 
@@ -54,22 +53,22 @@ function getThirdPInCriticalPath() {
  */
 function getDomainName(val) {
   const slashes = val.indexOf('://');
-          let domainName = 'Unknown';
-          if (slashes > -1) {
-            const val1 = val.substring(slashes+3);
-            const firstSlash = val1.indexOf('/', slashes);
-            domainName = val1.substring(0, firstSlash);
-            let period = domainName.lastIndexOf('.');
-            let s1 = domainName.substring(0,period);
-            let theIdx = s1.lastIndexOf('.');
-            domainName = domainName.substring(theIdx+1);
-          }
-    return domainName; 
+  let domainName = 'Unknown';
+  if (slashes > -1) {
+    const val1 = val.substring(slashes+3);
+    const firstSlash = val1.indexOf('/', slashes);
+    domainName = val1.substring(0, firstSlash);
+    let period = domainName.lastIndexOf('.');
+    let s1 = domainName.substring(0,period);
+    let theIdx = s1.lastIndexOf('.');
+    domainName = domainName.substring(theIdx+1);
+  }
+  return domainName; 
 }
 
 var callback = function (item, val) {
   if ((item=== 'url') && (getThirdParty(val) !== '')) {
-    console.log('in callback ' +item + '==' + getDomainName(val));
+    // console.log('in callback ' +item + '==' + getDomainName(val));
     let idx = thirdPDomainName.indexOf(getDomainName(val));
     if (idx < 0)
        thirdPDomainName = thirdPDomainName + getDomainName(val) + ' ';
@@ -81,11 +80,13 @@ var callback = function (item, val) {
  * find3PDomains() rips through all the calls and groups all 3P calls by domain name
  */
 function find3PDomains(obj) {
+  ctrThirdPartyC = 0;
+  map = new Map;
   const items =  obj['network-requests'].details.items;
   for (var c in items) {
     let s2 = getDomainName(items[c].url);
     if (getThirdParty(items[c].url) !== '') ctrThirdPartyC++;
-    console.log('in hereeee' + ctrThirdPartyC + ' url=' + items[c].url);
+    // console.log('in hereeee' + ctrThirdPartyC + ' url=' + items[c].url);
     if (map.get(s2) === undefined) {
         let arr1 = [];
         arr1.push(items[c]);
@@ -100,7 +101,7 @@ function find3PDomains(obj) {
   for (let [key, value] of map) {
       for (let x=0; x < value.length; x++) {
           let thirdParty = getThirdPartyCallsAB(value[x]);
-          if (thirdParty != '') thirdPartyCallsCount++;
+          // if (thirdParty != '') thirdPartyCallsCount++;
           s1 = s1 + thirdParty;
       }
   }
@@ -336,6 +337,8 @@ module.exports = (obj) => {
       // new stuff
       const obj2 = obj1['critical-request-chains'].details;
       let chains = obj2.chains;
+      thirdPInCC = 0;
+      thirdPDomainName = '';
       find3PInCriticalRequestChain(chains);
 
       const cpDomains = getCPDomains();
