@@ -42,14 +42,13 @@ function generateFileName(fileName) {
  * produceReport() gets data, produces report and
  * stores report on S3
  */
-function produceReport(targetUrl, context, callback) {
+function produceReport(marketplace, targetUrl, context, callback) {
   const perfUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${targetUrl}`;
   // console.log(perfUrl);
   fetch(perfUrl)
     .then((response) => {
       response.json().then(function(obj) {
-        // console.log(obj);
-        const html1 = createPage(obj);
+        const html1 = createPage(marketplace, obj);
         // generate the file name for storing in S3
         const reportFileName = generateFileName(targetUrl);
         s3.putObject({
@@ -74,19 +73,22 @@ const delay = (ms) => new Promise(
  * dispatch() runs performance analysis on each site with delay in between
  * as API is limited to one per second
  */
-function dispatch(sites, context, callback) {
+function dispatch(attributename, site, context, callback) {
   delay(2000).then(() => {
     // console.log('Resolved after 2 seconds');
     const end = Date.now(); // done
     console.log(`The loop took ${end - start} ms`);
-    produceReport(sites, context, callback);
+    produceReport(attributename, site, context, callback);
     // produceReport(sites);
   });
 }
 
 module.exports.getperf = (event, context, callback) => {
+  // remove the following 2 lines and comment out module.exporta and associated closing brace
+  // var context;
+  // var callback;
   for (var attributename in sites) {
     console.log(attributename + ':' + sites[attributename]);
-    dispatch(sites[attributename], context, callback);
+    dispatch(attributename, sites[attributename], context, callback);
   }
 };

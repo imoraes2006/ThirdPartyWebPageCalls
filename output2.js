@@ -5,21 +5,67 @@ const createString = require('./thirdPartyHTMLrpt.js');
 const consts = require('./constants.js');
 const roundTo = require('round-to');
 
+// needed for storing 3p calls in db
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'});
+const ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+
 // new stuff
 var map = new Map;
 var thirdPInCC = 0;
 var thirdPDomainName = '';
 var ctrThirdPartyC = 0;
 
+/**
+* getTimestamp() as it is used as key for storing results in database
+*/
+function getTimestamp() {
+    let today = new Date();
+    // adjust 0 before single digit date
+    let date = ("0" + today.getDate()).slice(-2);
+    let month = ("0" + (today.getMonth() + 1)).slice(-2);
+    let year = today.getFullYear();
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+    let timestamp = year + "-" + month + "-" + date;
+    return timestamp;
+}
 
+/**
+* getCPDomains() returns 3P domain name
+*/
 function getCPDomains() {
   return thirdPDomainName;
 }
 
 /**
+* storeResults() stores num of 3P calls in DynamoDB
+*/
+
+function store3PCalls(marketplace, thirdpartycalls) {
+    var ts = getTimestamp();
+    var thirdp = thirdpartycalls.toString();
+    var params = {
+        TableName: 'audible-3p-tags',
+        Item: {
+          'datetime' : {S: ts},
+          'marketplace' : {S: marketplace},
+          'thirdpcalls' : {N: thirdp}
+        }
+      }; 
+    ddb.putItem(params, function(err, data) {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Success", data);
+      }
+    });
+}
+
+/**
  * getThirdParty() deteremines if URI is a 3P call
  */
-
 function getThirdParty(val) {
   let thirdPLine = '';
     const firstCut = val.indexOf('.');
@@ -320,7 +366,7 @@ function getCriticalRequestChains(obj) {
   return val;
 }
 
-module.exports = (obj) => {
+module.exports = (marketplace, obj) => {
   let html = '';
   if ((typeof obj  === "undefined") || (typeof obj.lighthouseResult  === "undefined")) {
     html = 'Sorry there was an error in creating the report'
@@ -360,6 +406,8 @@ module.exports = (obj) => {
         thirdPCNCP: thirdPCallsinCP,
         badGuys : str3
       };
+      // store 3P calls in database
+      store3PCalls(marketplace, ctrThirdPartyC);
       // pass data to creaee HTML page
       html = createString(core);
   }
