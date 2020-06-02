@@ -59,6 +59,7 @@ function store3PCalls(marketplace, thirdpartycalls) {
         console.log("Error", err);
       } else {
         console.log("Success", data);
+        // console.log(`THIRD PARTY CALLS FOR ${marketplace} IS ${thirdpartycalls}`);
       }
     });
 }

@@ -58,12 +58,36 @@ function produceReport(marketplace, targetUrl, context, callback) {
         }).promise();
         if (response.ok) {
           return response;
-        }
-        return Promise.reject(new Error(
+        } else {
+          delay(100).then(() => {
+            // if too many requests try once more. Ugly code to clean up later
+            console.log('Retry fetch if 429 too may requests');
+            if (response.status === 429) {
+              fetch(perfUrl) 
+                .then((response) => {
+                  response.json().then(function(obj) {
+                    const html1 = createPage(marketplace, obj);
+                    // generate the file name for storing in S3
+                    const reportFileName = generateFileName(targetUrl);
+                    s3.putObject({
+                      Bucket: process.env.BUCKET,
+                      Key: reportFileName,
+                      Body: html1,
+                    }).promise();
+                    if (response.ok) {
+                      return response;
+                    }
+                });
+              })
+            } // response status 429
+          }) // delay
+        } // else if fetch failed 429 
+          return Promise.reject(new Error(
             `Failed to fetch ${response.url}: ${response.status} ${response.statusText}`));
       });
     })
-}
+} // produce report function
+
 
 const delay = (ms) => new Promise(
   (resolve) => setTimeout(resolve, ms)

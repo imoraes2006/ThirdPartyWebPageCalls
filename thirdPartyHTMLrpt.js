@@ -1,5 +1,6 @@
 'use strict';
 module.exports = (obj) => {
+  // console.log(`IN THIRD PARTY THIRD PARTY CALLS FOR ${obj.targetSite} IS ${obj.outsideCalls}`);
   let str1 = `<html>
             <style>
                 div {
