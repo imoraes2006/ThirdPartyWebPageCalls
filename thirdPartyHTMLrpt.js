@@ -38,9 +38,6 @@ module.exports = (obj) => {
               <ul>
                 <li>Tags on the page are making <b>${obj.outsideCalls}</b> calls to other (non-Audible) web sites while the page is being loaded for the first time. If you want even more details on the third party tags on your site, you know who to contact :)</li>
                 <li>The total size of your page was <b>${obj.totPageMB}</b> (just saying that Google recommends that it be less than 0.5 MB).  In general, the more content that needs to be downloaded during the loading of a page, the slower the page. </li>
-                <li>Based on a sample of real Chrome browser users visiting this page, about ${obj.cpdCtr}% of them see some content displayed on their screen in under a second (the higher the number the better). I abandon slow web sites do you? 
-                At ${obj.firstMeaningfulPaint} the user feels that the primary content of the page is displayed.
-                At ${obj.timeToInteractive} the page is displayed and able to consistently respond to user input</li>
                 </ul></p> 
               The goal of this effort and others is to create awareness in order to significantly reduce and eliminate data being shared with third parties. More detail is shown below. </div>    
               <h2>DETAILS</h2>
@@ -72,11 +69,6 @@ module.exports = (obj) => {
                 <tr>
                   <td><a href="https://developers.google.com/web/tools/lighthouse/audits/bootup">Time for processing JavaScript during loading of page</a></td>
                   <td>${obj.jsParseTime}</td>
-                </tr>
-                <tr>
-                <tr>
-                  <td><a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#time_to_interactive">Time when page displayed and responds to input</a></td>
-                  <td>${obj.timeToInteractive}</td>
                 </tr>
               </table>
             </body>
